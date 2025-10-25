@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include "DX.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -30,7 +31,7 @@ void RegisterWindowClass(HINSTANCE hInstance)
     RegisterClass(&wc);  // Windowsに登録
 }
 
-void FCreateWindow(HINSTANCE hInstance, int nCmdShow) 
+HWND FCreateWindow(HINSTANCE hInstance, int nCmdShow) 
 {
     HWND hwnd = CreateWindow(
         "GameWindow",        // ウィンドウクラス名
@@ -44,6 +45,7 @@ void FCreateWindow(HINSTANCE hInstance, int nCmdShow)
     );
 
     ShowWindow(hwnd, nCmdShow);  // ウィンドウを表示
+    return hwnd;
 }
 
 bool MessageLoop()
@@ -77,15 +79,19 @@ int WINAPI WinMain(
 )
 {
     // ここにメインの処理を書く
+
     // 1. ウィンドウクラス登録
     RegisterWindowClass(hInstance);
 
     // 2. ウィンドウ作成
-    FCreateWindow(hInstance, nCmdShow);
+    HWND hwnd = FCreateWindow(hInstance, nCmdShow);
+
+    // DirectX
+    DirectX dxc;
+    dxc.dx(hwnd);
 
     // ゲームループ開始.
     MainGameLoop();
-
 
     return 0;
 }
