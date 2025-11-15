@@ -1,5 +1,3 @@
-#include <d3d12.h>
-#include <dxgi1_4.h>
 #include "DX.h"
 
 #pragma comment(lib, "dxgi.lib")
@@ -172,6 +170,8 @@ public:
 
         return swapChain;
     }
+
+
 };
 class debugLayer {
 public:
@@ -205,15 +205,15 @@ void DirectX::dx(HWND hwnd) {
     swapChain scc;
     debugLayer dlc;
 
-    IDXGIFactory4* factory = dxgic.CreateDXGIFactory();
+    /*IDXGIFactory4**/ factory = dxgic.CreateDXGIFactory();
     
-    IDXGIAdapter* HWadapter = adpc.GetHardwareAdapter(factory);
+    /*IDXGIAdapter**/ HWadapter = adpc.GetHardwareAdapter(factory);
 
-    ID3D12Device* d3d12d = devc.CreateD3D12Device(HWadapter);
+    /*ID3D12Device* */d3d12d = devc.CreateD3D12Device(HWadapter);
 
-    ID3D12CommandQueue* cq = cqc.CreateCommandQueue(d3d12d);
+    /*ID3D12CommandQueue**/ cq = cqc.CreateCommandQueue(d3d12d);
 
-    /*IDXGISwapChain3* sc = */scc.CreateSwapChain(factory, cq, hwnd);
+    /*IDXGISwapChain3* */sc = scc.CreateSwapChain(factory, cq, hwnd);
 
     dlc.EnableDebugLayer();
 }

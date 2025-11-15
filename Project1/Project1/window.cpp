@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "DX.h"
+#include "DisplayClear.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -86,9 +87,12 @@ int WINAPI WinMain(
     // 2. ウィンドウ作成
     HWND hwnd = FCreateWindow(hInstance, nCmdShow);
 
-    // DirectX
+    // DirectX.
     DirectX dxc;
     dxc.dx(hwnd);
+
+    // 画面クリア.
+    DisplayClear clearc;
 
     // ゲームループ開始.
     MainGameLoop();
