@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClCompile Include="DisplayClear.cpp" />
     <ClCompile Include="DX.cpp" />
+    <ClCompile Include="trianglePolygon.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayClear.h" />
     <ClInclude Include="DX.h" />
+    <ClInclude Include="trianglePolygon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

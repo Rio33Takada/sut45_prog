@@ -73,10 +73,10 @@ void MainGameLoop()
 
 
 int WINAPI WinMain(
-    HINSTANCE hInstance,      // アプリケーションの識別番号
-    HINSTANCE hPrevInstance,  // 基本使わなくていい
-    LPSTR lpCmdLine,          // コマンドライン引数（起動時のオプション）
-    int nCmdShow              // ウィンドウの表示方法（最大化、最小化など）
+    _In_ HINSTANCE hInstance,      // アプリケーションの識別番号
+    _In_opt_ HINSTANCE hPrevInstance,  // 基本使わなくていい
+    _In_ LPSTR lpCmdLine,          // コマンドライン引数（起動時のオプション）
+    _In_ int nCmdShow              // ウィンドウの表示方法（最大化、最小化など）
 )
 {
     // ここにメインの処理を書く

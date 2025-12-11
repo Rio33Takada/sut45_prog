@@ -1,6 +1,8 @@
 #include "DX.h"
 
 #pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3d12.lib")
+
 
 class DXGI{
 public:
