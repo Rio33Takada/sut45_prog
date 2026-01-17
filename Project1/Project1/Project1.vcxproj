@@ -131,6 +131,7 @@
     <ClCompile Include="DX.cpp" />
     <ClCompile Include="pipeline_state_object.cpp" />
     <ClCompile Include="root_signature.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="trianglePolygon.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="DX.h" />
     <ClInclude Include="pipeline_state_object.h" />
     <ClInclude Include="root_signature.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="trianglePolygon.h" />
   </ItemGroup>
   <ItemGroup>
@@ -147,12 +149,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps</EntryPointName>
     </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

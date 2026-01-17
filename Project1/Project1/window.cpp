@@ -1,6 +1,10 @@
 #include <Windows.h>
 #include "DX.h"
 #include "DisplayClear.h"
+#include "pipeline_state_object.h"
+#include "root_signature.h"
+#include "trianglePolygon.h"
+#include "shader.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -94,8 +98,22 @@ int WINAPI WinMain(
     // 画面クリア.
     DisplayClear clearc;
 
+    shader shaderc;
+    shaderc.cretate(* dxc.d3d12d);
+
+    rootSignature rootSignaturec;
+    rootSignaturec.create(*dxc.d3d12d);
+
+    pipelineStateObject pipelineStateObjectc;
+    pipelineStateObjectc.create(* dxc.d3d12d, * shaderc.vertexShader_, * shaderc.pixelShader_, *rootSignaturec.rootSignature);
+
+    trianglePolygon trianglePolygonc;
+    trianglePolygonc.create(* dxc.d3d12d);
+
     // ゲームループ開始.
     MainGameLoop();
+
+
 
     return 0;
 }
