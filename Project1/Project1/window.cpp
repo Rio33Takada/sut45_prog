@@ -1,117 +1,134 @@
-#include <Windows.h>
+ï»¿#include <Windows.h>
 #include "DX.h"
 #include "DisplayClear.h"
 #include "pipeline_state_object.h"
 #include "root_signature.h"
 #include "trianglePolygon.h"
 #include "shader.h"
+#include "fence.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-    case WM_DESTROY:  // ~ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
-        PostQuitMessage(0);  // uƒAƒvƒŠ‚ğI—¹‚µ‚Ü‚·v‚ÆWindows‚É’Ê’m
+    case WM_DESTROY:  // Ã—ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸæ™‚
+        PostQuitMessage(0);  // ã€Œã‚¢ãƒ—ãƒªã‚’çµ‚äº†ã—ã¾ã™ã€ã¨Windowsã«é€šçŸ¥
         return 0;
-    case WM_PAINT:    // ƒEƒBƒ“ƒhƒE‚ÌÄ•`‰æ‚ª•K—v‚È
-        // ‰æ–Ê‚ğXV‚·‚éˆ—‚ğ‚±‚±‚É‘‚­
+    case WM_PAINT:    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å†æç”»ãŒå¿…è¦ãªæ™‚
+        // ç”»é¢ã‚’æ›´æ–°ã™ã‚‹å‡¦ç†ã‚’ã“ã“ã«æ›¸ã
         return 0;
-    case WM_KEYDOWN:  // ƒL[‚ª‰Ÿ‚³‚ê‚½
-        // ƒL[“ü—Í‚Ìˆ—‚ğ‚±‚±‚É‘‚­
+    case WM_KEYDOWN:  // ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸæ™‚
+        // ã‚­ãƒ¼å…¥åŠ›ã®å‡¦ç†ã‚’ã“ã“ã«æ›¸ã
         return 0;
     }
-    // ©•ª‚Åˆ—‚µ‚È‚¢ƒƒbƒZ[ƒW‚ÍWindows‚É”C‚¹‚é
+    // è‡ªåˆ†ã§å‡¦ç†ã—ãªã„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯Windowsã«ä»»ã›ã‚‹
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 void RegisterWindowClass(HINSTANCE hInstance) 
 {
     WNDCLASS wc{};
-    wc.lpfnWndProc = WindowProc;           // ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚ğw’èiŒãqj
-    wc.hInstance = hInstance;              // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒCƒ“ƒXƒ^ƒ“ƒX
-    wc.lpszClassName = "GameWindow";      // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX–¼
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);  // ƒ}ƒEƒXƒJ[ƒ\ƒ‹
-    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);  // ”wŒiF
+    wc.lpfnWndProc = WindowProc;           // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‚’æŒ‡å®šï¼ˆå¾Œè¿°ï¼‰
+    wc.hInstance = hInstance;              // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+    wc.lpszClassName = "GameWindow";      // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹å
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);  // ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«
+    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);  // èƒŒæ™¯è‰²
 
-    RegisterClass(&wc);  // Windows‚É“o˜^
+    RegisterClass(&wc);  // Windowsã«ç™»éŒ²
 }
 
 HWND FCreateWindow(HINSTANCE hInstance, int nCmdShow) 
 {
     HWND hwnd = CreateWindow(
-        "GameWindow",        // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX–¼
-        "My Game",           // ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹
-        WS_OVERLAPPEDWINDOW,  // ƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹
-        CW_USEDEFAULT, CW_USEDEFAULT,  // ˆÊ’ui©“®j
-        800, 600,            // ƒTƒCƒYi•A‚‚³j
-        NULL, NULL,          // eƒEƒBƒ“ƒhƒEAƒƒjƒ…[
-        hInstance,           // ƒCƒ“ƒXƒ^ƒ“ƒX
-        NULL                 // ’Ç‰Áƒf[ƒ^
+        "GameWindow",        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹å
+        "My Game",           // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«
+        WS_OVERLAPPEDWINDOW,  // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«
+        CW_USEDEFAULT, CW_USEDEFAULT,  // ä½ç½®ï¼ˆè‡ªå‹•ï¼‰
+        800, 600,            // ã‚µã‚¤ã‚ºï¼ˆå¹…ã€é«˜ã•ï¼‰
+        NULL, NULL,          // è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€ãƒ¡ãƒ‹ãƒ¥ãƒ¼
+        hInstance,           // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+        NULL                 // è¿½åŠ ãƒ‡ãƒ¼ã‚¿
     );
 
-    ShowWindow(hwnd, nCmdShow);  // ƒEƒBƒ“ƒhƒE‚ğ•\¦
+    ShowWindow(hwnd, nCmdShow);  // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¡¨ç¤º
     return hwnd;
 }
 
 bool MessageLoop()
 {
-    // 3. ƒƒbƒZ[ƒWƒ‹[ƒv
-    MSG msg{};  // ƒƒbƒZ[ƒW‚ğŠi”[‚·‚é\‘¢‘Ì
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // ƒƒbƒZ[ƒW‚ª—ˆ‚é‚Ü‚Å‘Ò‹@
+    // 3. ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—
+    MSG msg{};  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ ¼ç´ã™ã‚‹æ§‹é€ ä½“
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒæ¥ã‚‹ã¾ã§å¾…æ©Ÿ
     {
-        if (msg.message == WM_QUIT) return false; // I—¹ƒƒbƒZ[ƒW‚ğó‚¯æ‚Á‚½‚çfalse‚ğ•Ô‚·.
+        if (msg.message == WM_QUIT) return false; // çµ‚äº†ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å—ã‘å–ã£ãŸã‚‰falseã‚’è¿”ã™.
 
-        TranslateMessage(&msg);  // ƒL[ƒ{[ƒhƒƒbƒZ[ƒW‚ğg‚¢‚â‚·‚¢Œ`‚É•ÏŠ·
-        DispatchMessage(&msg);   // “KØ‚ÈƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚É‘—M
+        TranslateMessage(&msg);  // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ã„ã‚„ã™ã„å½¢ã«å¤‰æ›
+        DispatchMessage(&msg);   // é©åˆ‡ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã«é€ä¿¡
     }
     return true;
 }
 
-void MainGameLoop() 
+void MainGameLoop(DirectX& directX, UINT64 frameFenceValue_[], UINT64& nextFenceValue_, Fence& fencec)
 {
     while (true)
     {
         if (!MessageLoop()) break;
+
+        // ç¾åœ¨ã®ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
+        const auto backBufferIndex = directX.sc->GetCurrentBackBufferIndex();
+
+        // ä»¥å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã® GPU ã®å‡¦ç†ãŒå®Œäº†ã—ã¦ã„ã‚‹ã‹ç¢ºèªã—ã¦å¾…æ©Ÿã™ã‚‹
+        if (frameFenceValue_[backBufferIndex] != 0) {
+            fencec.wait(frameFenceValue_[backBufferIndex]);
+        }
+
+
     }
 }
 
 
 int WINAPI WinMain(
-    _In_ HINSTANCE hInstance,      // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ì¯•Ê”Ô†
-    _In_opt_ HINSTANCE hPrevInstance,  // Šî–{g‚í‚È‚­‚Ä‚¢‚¢
-    _In_ LPSTR lpCmdLine,          // ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”i‹N“®‚ÌƒIƒvƒVƒ‡ƒ“j
-    _In_ int nCmdShow              // ƒEƒBƒ“ƒhƒE‚Ì•\¦•û–@iÅ‘å‰»AÅ¬‰»‚È‚Çj
+    _In_ HINSTANCE hInstance,      // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®è­˜åˆ¥ç•ªå·
+    _In_opt_ HINSTANCE hPrevInstance,  // åŸºæœ¬ä½¿ã‚ãªãã¦ã„ã„
+    _In_ LPSTR lpCmdLine,          // ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ï¼ˆèµ·å‹•æ™‚ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼‰
+    _In_ int nCmdShow              // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºæ–¹æ³•ï¼ˆæœ€å¤§åŒ–ã€æœ€å°åŒ–ãªã©ï¼‰
 )
 {
-    // ‚±‚±‚ÉƒƒCƒ“‚Ìˆ—‚ğ‘‚­
+    // ã“ã“ã«ãƒ¡ã‚¤ãƒ³ã®å‡¦ç†ã‚’æ›¸ã
 
-    // 1. ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX“o˜^
+    // 1. ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ç™»éŒ²
     RegisterWindowClass(hInstance);
 
-    // 2. ƒEƒBƒ“ƒhƒEì¬
+    // 2. ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
     HWND hwnd = FCreateWindow(hInstance, nCmdShow);
 
     // DirectX.
     DirectX dxc;
     dxc.dx(hwnd);
 
-    // ‰æ–ÊƒNƒŠƒA.
+    // ç”»é¢ã‚¯ãƒªã‚¢.
     DisplayClear clearc;
 
     shader shaderc;
-    shaderc.cretate(* dxc.d3d12d);
+    shaderc.cretate(*dxc.d3d12d);
 
     rootSignature rootSignaturec;
     rootSignaturec.create(*dxc.d3d12d);
 
     pipelineStateObject pipelineStateObjectc;
-    pipelineStateObjectc.create(* dxc.d3d12d, * shaderc.vertexShader_, * shaderc.pixelShader_, *rootSignaturec.rootSignature);
+    pipelineStateObjectc.create(*dxc.d3d12d, *shaderc.vertexShader_, *shaderc.pixelShader_, *rootSignaturec.rootSignature);
 
     trianglePolygon trianglePolygonc;
-    trianglePolygonc.create(* dxc.d3d12d);
+    trianglePolygonc.create(*dxc.d3d12d);
 
-    // ƒQ[ƒ€ƒ‹[ƒvŠJn.
-    MainGameLoop();
+    Fence fencec;
+    fencec.create(*dxc.d3d12d);
+
+    UINT64 frameFenceValue[2];
+    UINT64 nextFenceValue;
+
+    // ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—é–‹å§‹.
+    MainGameLoop(dxc, frameFenceValue, nextFenceValue, fencec);
 
 
 

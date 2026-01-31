@@ -1,4 +1,4 @@
-#include "DX.h"
+ï»¿#include "DX.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d12.lib")
@@ -8,14 +8,14 @@ IDXGIFactory4* DirectX::DXGI::CreateDXGIFactory() {
     UINT createFactoryFlags = 0;
 
 #if defined(_DEBUG)
-    // ƒfƒoƒbƒOƒrƒ‹ƒh‚Å‚ÍƒfƒoƒbƒOƒtƒ‰ƒO‚ðÝ’è
+    // ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã§ã¯ãƒ‡ãƒãƒƒã‚°ãƒ•ãƒ©ã‚°ã‚’è¨­å®š
     createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
 #endif
 
     HRESULT hr = CreateDXGIFactory2(createFactoryFlags, IID_PPV_ARGS(&factory));
     if (FAILED(hr))
     {
-        // ƒGƒ‰[ƒnƒ“ƒhƒŠƒ“ƒOFƒtƒ@ƒNƒgƒŠ[ì¬Ž¸”s
+        // ã‚¨ãƒ©ãƒ¼ãƒãƒ³ãƒ‰ãƒªãƒ³ã‚°ï¼šãƒ•ã‚¡ã‚¯ãƒˆãƒªãƒ¼ä½œæˆå¤±æ•—
         OutputDebugString("Failed to create DXGI Factory\n");
         return nullptr;
     }
@@ -26,30 +26,30 @@ IDXGIFactory4* DirectX::DXGI::CreateDXGIFactory() {
 IDXGIAdapter* DirectX::adapter::GetHardwareAdapter(IDXGIFactory4* factory) {
     IDXGIAdapter1* adapter;
 
-    // ƒn[ƒhƒEƒFƒAƒAƒ_ƒvƒ^[‚ð‡”Ô‚ÉŒŸõ
+    // ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ã‚’é †ç•ªã«æ¤œç´¢
     for (UINT adapterIndex = 0; ; ++adapterIndex)
     {
         adapter = nullptr;
         if (DXGI_ERROR_NOT_FOUND == factory->EnumAdapters1(adapterIndex, &adapter))
         {
-            break; // ƒAƒ_ƒvƒ^[‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍI—¹
+            break; // ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯çµ‚äº†
         }
 
-        // ƒAƒ_ƒvƒ^[î•ñ‚ðŽæ“¾
+        // ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼æƒ…å ±ã‚’å–å¾—
         DXGI_ADAPTER_DESC1 desc;
         adapter->GetDesc1(&desc);
 
-        // ƒ\ƒtƒgƒEƒFƒAƒAƒ_ƒvƒ^[‚ðƒXƒLƒbƒv
+        // ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ã‚’ã‚¹ã‚­ãƒƒãƒ—
         if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
         {
             adapter->Release();
             continue;
         }
 
-        // DirectX12‘Î‰žƒeƒXƒg
+        // DirectX12å¯¾å¿œãƒ†ã‚¹ãƒˆ
         if (SUCCEEDED(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
         {
-            return adapter; // “KØ‚ÈƒAƒ_ƒvƒ^[‚ð”­Œ©
+            return adapter; // é©åˆ‡ãªã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ã‚’ç™ºè¦‹
         }
 
         adapter->Release();
@@ -59,12 +59,12 @@ IDXGIAdapter* DirectX::adapter::GetHardwareAdapter(IDXGIFactory4* factory) {
 }
 
 ID3D12CommandQueue* DirectX::commandQueue::CreateCommandQueue(ID3D12Device* device) {
-    // ƒRƒ}ƒ“ƒhƒLƒ…[‚ÌÝ’è
+    // ã‚³ãƒžãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã®è¨­å®š
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-    queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;    // ’¼ÚŽÀsŒ^
-    queueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;  // ’Êí—Dæ“x
-    queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;    // “Á•Êƒtƒ‰ƒO‚È‚µ
-    queueDesc.NodeMask = 0;                             // ’PˆêGPUŽg—p
+    queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;    // ç›´æŽ¥å®Ÿè¡Œåž‹
+    queueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;  // é€šå¸¸å„ªå…ˆåº¦
+    queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;    // ç‰¹åˆ¥ãƒ•ãƒ©ã‚°ãªã—
+    queueDesc.NodeMask = 0;                             // å˜ä¸€GPUä½¿ç”¨
 
     ID3D12CommandQueue* commandQueue;
     HRESULT hr = device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue));
@@ -75,7 +75,7 @@ ID3D12CommandQueue* DirectX::commandQueue::CreateCommandQueue(ID3D12Device* devi
         return nullptr;
     }
 
-    // ƒfƒoƒbƒO—p‚Ì–¼‘OÝ’èi”CˆÓ‚¾‚ª„§j
+    // ãƒ‡ãƒãƒƒã‚°ç”¨ã®åå‰è¨­å®šï¼ˆä»»æ„ã ãŒæŽ¨å¥¨ï¼‰
     commandQueue->SetName(L"Main Command Queue");
 
     return commandQueue;
@@ -84,18 +84,18 @@ ID3D12CommandQueue* DirectX::commandQueue::CreateCommandQueue(ID3D12Device* devi
 ID3D12Device* DirectX::device::CreateD3D12Device(IDXGIAdapter* adapter) {
     ID3D12Device* device;
 
-    // ƒfƒoƒCƒXì¬‚ðŽŽs
+    // ãƒ‡ãƒã‚¤ã‚¹ä½œæˆã‚’è©¦è¡Œ
     HRESULT hr = D3D12CreateDevice(
-        adapter,                    // Žg—p‚·‚éƒAƒ_ƒvƒ^[
-        D3D_FEATURE_LEVEL_11_0,     // Å¬‹@”\ƒŒƒxƒ‹
-        IID_PPV_ARGS(&device)       // ì¬‚³‚ê‚éƒfƒoƒCƒX
+        adapter,                    // ä½¿ç”¨ã™ã‚‹ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼
+        D3D_FEATURE_LEVEL_11_0,     // æœ€å°æ©Ÿèƒ½ãƒ¬ãƒ™ãƒ«
+        IID_PPV_ARGS(&device)       // ä½œæˆã•ã‚Œã‚‹ãƒ‡ãƒã‚¤ã‚¹
     );
 
     if (FAILED(hr))
     {
-        // ƒtƒH[ƒ‹ƒoƒbƒNFƒ\ƒtƒgƒEƒFƒAƒAƒ_ƒvƒ^[‚ðŽŽs
+        // ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼šã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ã‚’è©¦è¡Œ
         hr = D3D12CreateDevice(
-            nullptr,                // ‹K’èƒAƒ_ƒvƒ^[
+            nullptr,                // è¦å®šã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼
             D3D_FEATURE_LEVEL_11_0,
             IID_PPV_ARGS(&device)
         );
@@ -113,24 +113,24 @@ ID3D12Device* DirectX::device::CreateD3D12Device(IDXGIAdapter* adapter) {
 }
 
 IDXGISwapChain3* DirectX::swapChain::CreateSwapChain(IDXGIFactory4* factory, ID3D12CommandQueue* commandQueue, HWND hwnd) {
-    // ƒXƒƒbƒvƒ`ƒF[ƒ“‚ÌÚ×Ý’è
+    // ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ãƒ¼ãƒ³ã®è©³ç´°è¨­å®š
     DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-    swapChainDesc.BufferCount = 2;                      // ƒ_ƒuƒ‹ƒoƒbƒtƒ@ƒŠƒ“ƒO
-    swapChainDesc.Width = 1280;                         // ‰æ–Ê•
-    swapChainDesc.Height = 720;                         // ‰æ–Ê‚
-    swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // ƒsƒNƒZƒ‹ƒtƒH[ƒ}ƒbƒg
-    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;  // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg—p
-    swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;     // ‚‘¬Ø‘Ö
-    swapChainDesc.SampleDesc.Count = 1;                 // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒŠƒ“ƒO‚È‚µ
+    swapChainDesc.BufferCount = 2;                      // ãƒ€ãƒ–ãƒ«ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°
+    swapChainDesc.Width = 1280;                         // ç”»é¢å¹…
+    swapChainDesc.Height = 720;                         // ç”»é¢é«˜
+    swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // ãƒ”ã‚¯ã‚»ãƒ«ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆ
+    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;  // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆç”¨
+    swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;     // é«˜é€Ÿåˆ‡æ›¿
+    swapChainDesc.SampleDesc.Count = 1;                 // ãƒžãƒ«ãƒã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ãªã—
 
     IDXGISwapChain1* swapChain1;
     HRESULT hr = factory->CreateSwapChainForHwnd(
-        commandQueue,       // ƒRƒ}ƒ“ƒhƒLƒ…[
-        hwnd,              // ƒ^[ƒQƒbƒgƒEƒBƒ“ƒhƒE
-        &swapChainDesc,    // Ý’è
-        nullptr,           // ƒtƒ‹ƒXƒNƒŠ[ƒ“Ý’è
-        nullptr,           // o—Í§ŒÀ
-        &swapChain1        // ì¬‚³‚ê‚éƒXƒƒbƒvƒ`ƒF[ƒ“
+        commandQueue,       // ã‚³ãƒžãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼
+        hwnd,              // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
+        &swapChainDesc,    // è¨­å®š
+        nullptr,           // ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³è¨­å®š
+        nullptr,           // å‡ºåŠ›åˆ¶é™
+        &swapChain1        // ä½œæˆã•ã‚Œã‚‹ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ãƒ¼ãƒ³
     );
 
     if (FAILED(hr))
@@ -139,7 +139,7 @@ IDXGISwapChain3* DirectX::swapChain::CreateSwapChain(IDXGIFactory4* factory, ID3
         return nullptr;
     }
 
-    // ‚æ‚è‚‹@”\‚ÈƒCƒ“ƒ^[ƒtƒF[ƒX‚ÉƒLƒƒƒXƒg
+    // ã‚ˆã‚Šé«˜æ©Ÿèƒ½ãªã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã«ã‚­ãƒ£ã‚¹ãƒˆ
     IDXGISwapChain3* swapChain;
     hr = swapChain1->QueryInterface(IID_PPV_ARGS(&swapChain));
     swapChain1->Release();
@@ -155,14 +155,14 @@ IDXGISwapChain3* DirectX::swapChain::CreateSwapChain(IDXGIFactory4* factory, ID3
 
 void DirectX::debugLayer::EnableDebugLayer() {
 #if defined(_DEBUG)
-    // ƒfƒoƒbƒOƒCƒ“ƒ^[ƒtƒF[ƒX‚ðŽæ“¾
+    // ãƒ‡ãƒãƒƒã‚°ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—
     ID3D12Debug* debugController;
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
     {
-        // ƒfƒoƒbƒOƒŒƒCƒ„[‚ð—LŒø‰»
+        // ãƒ‡ãƒãƒƒã‚°ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æœ‰åŠ¹åŒ–
         debugController->EnableDebugLayer();
 
-        // ‚æ‚èÚ×‚ÈŒŸØ‚ð—LŒø‰»i”CˆÓj
+        // ã‚ˆã‚Šè©³ç´°ãªæ¤œè¨¼ã‚’æœ‰åŠ¹åŒ–ï¼ˆä»»æ„ï¼‰
         ID3D12Debug1* debugController1;
         if (SUCCEEDED(debugController->QueryInterface(IID_PPV_ARGS(&debugController1))))
         {
@@ -181,6 +181,8 @@ void DirectX::dx(HWND hwnd) {
     //swapChain scc;
     //debugLayer dlc;
 
+    dlc.EnableDebugLayer();
+
     /*IDXGIFactory4**/ factory = dxgic.CreateDXGIFactory();
     
     /*IDXGIAdapter**/ HWadapter = adpc.GetHardwareAdapter(factory);
@@ -190,6 +192,4 @@ void DirectX::dx(HWND hwnd) {
     /*ID3D12CommandQueue**/ cq = cqc.CreateCommandQueue(d3d12d);
 
     /*IDXGISwapChain3* */sc = scc.CreateSwapChain(factory, cq, hwnd);
-
-    dlc.EnableDebugLayer();
 }

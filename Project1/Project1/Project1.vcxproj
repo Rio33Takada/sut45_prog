@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClCompile Include="DisplayClear.cpp" />
     <ClCompile Include="DX.cpp" />
+    <ClCompile Include="fence.cpp" />
     <ClCompile Include="pipeline_state_object.cpp" />
     <ClCompile Include="root_signature.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="trianglePolygon.cpp" />
     <ClCompile Include="window.cpp" />
+    <ClCompile Include="command_allocator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayClear.h" />
@@ -142,6 +144,8 @@
     <ClInclude Include="root_signature.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="trianglePolygon.h" />
+    <ClInclude Include="fence.h" />
+    <ClInclude Include="command_allocator.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
