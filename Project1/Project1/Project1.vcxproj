@@ -135,7 +135,6 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="trianglePolygon.cpp" />
     <ClCompile Include="window.cpp" />
-    <ClCompile Include="command_allocator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayClear.h" />
@@ -145,7 +144,6 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="trianglePolygon.h" />
     <ClInclude Include="fence.h" />
-    <ClInclude Include="command_allocator.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
